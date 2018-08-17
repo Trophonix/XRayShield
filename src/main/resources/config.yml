@@ -1,0 +1,48 @@
+#
+# X-ray Shield by Trophonix
+#
+# How to configure
+# -----------------
+#
+# ores:
+#  ore_name: (google "bukkit material names 1.12" and substitute the version you're using for 1.12)
+#    amount: (how many ores before it flags as suspicious)
+#    time: (the time in which the above amount would be considered suspicious - this can be a number in seconds or formatted like "5m" for 5 minutes)
+#
+# lang ---
+#
+# The lang section contains all the messages sent by this plugin.
+# You can use the & sign as a color code symbol.
+#
+# placeholders ---
+#
+# In the lang options, you can use the following placeholders and they will be replaced by the indicated text
+#
+# %player% - replaced with the relevant player's name
+# %ore% - replaced by the ore's name
+# %amount% - replaced by the amount of ores
+# %time% - replaced by the relevant time
+# %location% - replaced by the last known mining location
+# %n - new line
+#
+
+ores:
+  iron_ore:
+    amount: 48
+    time: '10m'
+  gold_ore:
+    amount: 30
+    time: '10m'
+  diamond_ore:
+    amount: 15
+    time: '10m'
+  emerald_ore:
+    amount: 5
+    time: '5m'
+
+sendAlertEachVein: true
+
+sendAlertToOPs: false
+
+lang:
+  alert: '&6[&eX-Ray Detector&6] &c%player% &8has mined &c%amount% %ore% &8in &c%time%&8!%n&8They may be x-raying. Last location: %location%'

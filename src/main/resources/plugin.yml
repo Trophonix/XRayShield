@@ -1,0 +1,9 @@
+name: 'XRayShield'
+author: 'Trophonix'
+version: ${project.version}
+main: 'com.trophonix.xrayshield.XRayShield'
+api-version: 1.13
+permissions:
+  xrayshield.alert:
+    description: 'Players with this permission get alerts of possible x-rayers'
+    default: 'false'
