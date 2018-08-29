@@ -41,8 +41,12 @@ ores:
     time: '5m'
 
 sendAlertEachVein: true
-
 sendAlertToOPs: false
+
+logs:
+  enabled: false
+  fileNameFormat: "dd'-'MM'-'yyyy'.log'"
+  messageFormat: "'['kk:ss'] %player% mined %amount% %ore% in %time% at %location%'"
 
 lang:
   alert: '&6[&eX-Ray Shield&6] &c%player% &8has mined &c%amount% %ore% &8in &c%time%&8!%n&8They may be x-raying. Last location: %location%'

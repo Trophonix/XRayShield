@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -21,16 +22,21 @@ public class XRayShield extends JavaPlugin {
   private Map<UUID, Location> playerLastAlerts;
 
   private XRayListener xRayListener;
+  private Logs logs;
 
   private boolean sendAlertEachVein;
   private boolean sendAlertToOPs;
+
   private String alertConfig;
+  private String logsMessageFormatConfig;
 
   @Override
   public void onEnable() {
     INSTANCE = this;
     xRayListener = new XRayListener();
     getServer().getPluginManager().registerEvents(xRayListener, this);
+    if (getConfig().getBoolean("logs.enabled", false)) logs = new Logs(new File(getDataFolder(), "logs"),
+            getConfig().getString("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'"));
     breakEvents = new ArrayList<>();
     playerLastAlerts = new HashMap<>();
     if (!getDataFolder().exists()) {
@@ -45,8 +51,8 @@ public class XRayShield extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[X-Ray Shield] INVALID MATERIAL: " + oreName);
         return;
       }
-      String timeString = oreSection.getString(oreName + ".time");
-      XRayOre xRayOre = new XRayOre(blockType, oreSection.getInt(oreName + ".amount"), timeString, parseTime(timeString));
+      String timeString = oreSection.getString(oreName + ".time", "5m");
+      XRayOre xRayOre = new XRayOre(blockType, oreSection.getInt(oreName + ".amount", 10), timeString, parseTime(timeString));
       XRayOre.ORES.add(xRayOre);
     });
     getLogger().info("X-Ray Shield loaded " + XRayOre.ORES.size() + " ores:");
@@ -59,6 +65,8 @@ public class XRayShield extends JavaPlugin {
     xRayListener.blockPlacements.clear();
     xRayListener.blockPlacements = null;
     xRayListener = null;
+    logs.save();
+    logs = null;
     breakEvents.clear();
     breakEvents = null;
     playerLastAlerts.clear();
@@ -72,7 +80,8 @@ public class XRayShield extends JavaPlugin {
     super.reloadConfig();
     sendAlertEachVein = getConfig().getBoolean("sendAlertEachVein", true);
     sendAlertToOPs = getConfig().getBoolean("sendAlertToOPs", false);
-    alertConfig = getConfig().getString("lang.alert");
+    alertConfig = getConfig().getString("lang.alert", "&6[&eX-Ray Shield&6] &c%player% &8has mined &c%amount% %ore% &8in &c%time%&8!%n&8They may be x-raying. Last location: %location%");
+    logsMessageFormatConfig = getConfig().getString("logs.messageFormat", "'['kk:ss'] %player% mined %amount% %ore% in %time% at %location%'");
   }
 
   public void oreBreak(OreBreakEvent event) {
@@ -90,6 +99,7 @@ public class XRayShield extends JavaPlugin {
         return;
       }
       String alert = replacePlaceholders(alertConfig, event.getPlayer(), event.getBlockType(), events.size(), xRayOre.getTimeString(), event.getLocation());
+      if (logs != null) logs.push(replacePlaceholders(logsMessageFormatConfig, event.getPlayer(), event.getBlockType(), events.size(), xRayOre.getTimeString(), event.getLocation()));
       Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("xrayshield.alert") || (sendAlertToOPs && player.isOp()))
               .forEach(player -> player.sendMessage(alert.split("%n")));
       playerLastAlerts.put(event.getPlayer().getUniqueId(), event.getLocation());
@@ -120,7 +130,7 @@ public class XRayShield extends JavaPlugin {
   }
 
   private static String locationToString(Location location) {
-    return location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ();
+    return "x" + location.getBlockX() + " y" + location.getBlockY() + " z" + location.getBlockZ();
   }
 
   private static String replacePlaceholders(String string, Player player, Material blockType, int amount, String time, Location location) {
