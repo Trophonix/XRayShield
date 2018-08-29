@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class XRayListener implements Listener {
 
@@ -26,7 +27,7 @@ public class XRayListener implements Listener {
 
   @EventHandler
   public void onOreBreak(OreBreakEvent event) {
-    List<Location> placements = blockPlacements.get(event.getPlayer().getUniqueId());
+    List<Location> placements = blockPlacements.values().stream().<Location>flatMap(List::stream).collect(Collectors.toList());
     if (placements != null && placements.contains(event.getLocation())) return;
     XRayShield.get().oreBreak(event);
   }
@@ -36,9 +37,6 @@ public class XRayListener implements Listener {
     List<Location> placements = blockPlacements.get(event.getPlayer().getUniqueId());
     if (placements == null) placements = new ArrayList<>();
     placements.add(event.getBlock().getLocation());
-    while (placements.size() > 64) {
-      placements.remove(0);
-    }
     blockPlacements.put(event.getPlayer().getUniqueId(), placements);
   }
 
