@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class XRayListener implements Listener {
 
-  private Map<UUID, List<Location>> blockPlacements = new HashMap<>();
+  Map<UUID, List<Location>> blockPlacements = new HashMap<>();
 
   @EventHandler
   public void onBlockBreak(BlockBreakEvent event) {

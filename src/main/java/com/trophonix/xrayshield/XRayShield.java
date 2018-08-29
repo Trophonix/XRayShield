@@ -56,6 +56,8 @@ public class XRayShield extends JavaPlugin {
   @Override
   public void onDisable() {
     HandlerList.unregisterAll(this);
+    xRayListener.blockPlacements.clear();
+    xRayListener.blockPlacements = null;
     xRayListener = null;
     breakEvents.clear();
     breakEvents = null;
