@@ -6,7 +6,7 @@
 
     <groupId>com.trophonix.xrayshield</groupId>
     <artifactId>xrayshield</artifactId>
-    <version>1.02</version>
+    <version>1.03</version>
 
     <repositories>
         <repository>
