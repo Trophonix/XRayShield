@@ -103,7 +103,7 @@ public class XRayShield extends JavaPlugin {
     return INSTANCE;
   }
 
-  static long parseTime(String string) {
+  private static long parseTime(String string) {
     try {
       return Long.parseLong(string);
     } catch (NumberFormatException ignored) {
@@ -119,11 +119,11 @@ public class XRayShield extends JavaPlugin {
     }
   }
 
-  static String locationToString(Location location) {
+  private static String locationToString(Location location) {
     return location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ();
   }
 
-  static String replacePlaceholders(String string, Player player, Material blockType, int amount, String time, Location location) {
+  private static String replacePlaceholders(String string, Player player, Material blockType, int amount, String time, Location location) {
     return ChatColor.translateAlternateColorCodes('&', string)
             .replace("%player%", player.getName())
             .replace("%ore%", blockType.name().toLowerCase().replace("_", " "))

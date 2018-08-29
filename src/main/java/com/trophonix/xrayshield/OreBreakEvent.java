@@ -6,13 +6,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class OreBreakEvent extends Event {
+class OreBreakEvent extends Event {
 
   private static final HandlerList HANDLERS = new HandlerList();
 
-  private Player player;
-  private Location location;
-  private Material blockType;
+  private final Player player;
+  private final Location location;
+  private final Material blockType;
 
   OreBreakEvent(Player player, Location location, Material blockType) {
     this.player = player;

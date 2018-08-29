@@ -5,14 +5,14 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XRayOre {
+class XRayOre {
 
   static List<XRayOre> ORES = new ArrayList<>();
 
-  private Material blockType;
-  private int amount;
-  private String timeString;
-  private long time; // in seconds
+  private final Material blockType;
+  private final int amount;
+  private final String timeString;
+  private final long time; // in seconds
 
   XRayOre(Material blockType, int amount, String timeString, long time) {
     this.blockType = blockType;
