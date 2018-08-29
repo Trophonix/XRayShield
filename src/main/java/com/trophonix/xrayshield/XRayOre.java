@@ -5,9 +5,10 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.List;
 
-class XRayOre {
+public class XRayOre {
 
-  static List<XRayOre> ORES = new ArrayList<>();
+  // todo: no static
+  public static List<XRayOre> ORES = new ArrayList<>();
 
   private final Material blockType;
   private final int amount;

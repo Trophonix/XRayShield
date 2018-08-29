@@ -1,4 +1,4 @@
-package com.trophonix.xrayshield;
+package com.trophonix.xrayshield.events;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-class OreBreakEvent extends Event {
+public class OreBreakEvent extends Event {
 
   private static final HandlerList HANDLERS = new HandlerList();
 

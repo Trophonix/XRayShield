@@ -1,5 +1,7 @@
-package com.trophonix.xrayshield;
+package com.trophonix.xrayshield.events;
 
+import com.trophonix.xrayshield.XRayOre;
+import com.trophonix.xrayshield.XRayShield;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,9 +14,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class XRayListener implements Listener {
+public class XRayListener implements Listener {
 
-  Map<UUID, List<Location>> blockPlacements = new HashMap<>();
+  // todo: getter
+  public Map<UUID, List<Location>> blockPlacements = new HashMap<>();
 
   @EventHandler
   public void onBlockBreak(BlockBreakEvent event) {
