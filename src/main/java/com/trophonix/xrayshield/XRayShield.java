@@ -35,14 +35,29 @@ public class XRayShield extends JavaPlugin {
     INSTANCE = this;
     xRayListener = new XRayListener();
     getServer().getPluginManager().registerEvents(xRayListener, this);
-    if (getConfig().getBoolean("logs.enabled", false)) logs = new Logs(new File(getDataFolder(), "logs"),
-            getConfig().getString("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'"));
     breakEvents = new ArrayList<>();
     playerLastAlerts = new HashMap<>();
     if (!new File(getDataFolder(), "config.yml").exists()) {
       getDataFolder().mkdirs();
       saveDefaultConfig();
+    } else {
+      // update configs
+      double version = getConfig().getDouble("configVersion", 0);
+
+      if (version < 1.02) {
+        getConfig().set("logs.enabled", false);
+        getConfig().set("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'");
+        getConfig().set("logs.messageFormat", "'['kk:ss'] %player% mined %amount% %ore% in %time% at %location%'");
+      }
+
+      if (version == 0) {
+        getConfig().set("configVersion", Double.parseDouble(getDescription().getVersion()));
+      }
+
+      saveConfig();
     }
+    if (getConfig().getBoolean("logs.enabled", false)) logs = new Logs(new File(getDataFolder(), "logs"),
+            getConfig().getString("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'"));
     XRayOre.ORES = new ArrayList<>();
     ConfigurationSection oreSection = getConfig().getConfigurationSection("ores");
     oreSection.getKeys(false).forEach(oreName -> {
