@@ -1,7 +1,7 @@
 package com.trophonix.xrayshield.events;
 
-import com.trophonix.xrayshield.XRayOre;
 import com.trophonix.xrayshield.XRayShield;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,14 +16,13 @@ import java.util.stream.Collectors;
 
 public class XRayListener implements Listener {
 
-  // todo: getter
-  public Map<UUID, List<Location>> blockPlacements = new HashMap<>();
+  @Getter private Map<UUID, List<Location>> blockPlacements = new HashMap<>();
 
   @EventHandler
   public void onBlockBreak(BlockBreakEvent event) {
     Material blockType = event.getBlock().getType();
     if (blockType == null) return;
-    if (XRayOre.ORES.stream().noneMatch(ore -> ore.getBlockType() == blockType)) return;
+    if (XRayShield.get().getOres().stream().noneMatch(ore -> ore.getBlockType() == blockType)) return;
     OreBreakEvent oreBreakEvent = new OreBreakEvent(event.getPlayer(), event.getBlock().getLocation(), event.getBlock().getType());
     Bukkit.getPluginManager().callEvent(oreBreakEvent);
   }
@@ -31,7 +30,7 @@ public class XRayListener implements Listener {
   @EventHandler
   public void onOreBreak(OreBreakEvent event) {
     List<Location> placements = blockPlacements.values().stream().flatMap(List::stream).collect(Collectors.toList());
-    if (placements != null && placements.contains(event.getLocation())) return;
+    if (placements.contains(event.getLocation())) return;
     XRayShield.get().oreBreak(event);
   }
 

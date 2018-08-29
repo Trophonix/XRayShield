@@ -1,11 +1,13 @@
 package com.trophonix.xrayshield.events;
 
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+@Getter
 public class OreBreakEvent extends Event {
 
   private static final HandlerList HANDLERS = new HandlerList();
@@ -18,18 +20,6 @@ public class OreBreakEvent extends Event {
     this.player = player;
     this.location = location;
     this.blockType = blockType;
-  }
-
-  public Player getPlayer() {
-    return player;
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public Material getBlockType() {
-    return blockType;
   }
 
   @Override

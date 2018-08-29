@@ -1,14 +1,10 @@
 package com.trophonix.xrayshield;
 
+import lombok.Getter;
 import org.bukkit.Material;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Getter
 public class XRayOre {
-
-  // todo: no static
-  public static List<XRayOre> ORES = new ArrayList<>();
 
   private final Material blockType;
   private final int amount;
@@ -20,22 +16,6 @@ public class XRayOre {
     this.amount = amount;
     this.timeString = timeString;
     this.time = time;
-  }
-
-  public Material getBlockType() {
-    return blockType;
-  }
-
-  int getAmount() {
-    return amount;
-  }
-
-  public String getTimeString() {
-    return timeString;
-  }
-
-  public long getTime() {
-    return time;
   }
 
 }

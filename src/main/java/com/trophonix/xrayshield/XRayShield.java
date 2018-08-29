@@ -2,6 +2,7 @@ package com.trophonix.xrayshield;
 
 import com.trophonix.xrayshield.events.OreBreakEvent;
 import com.trophonix.xrayshield.events.XRayListener;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -23,14 +24,16 @@ public class XRayShield extends JavaPlugin {
   private List<OreBreakEvent> breakEvents;
   private Map<UUID, Location> playerLastAlerts;
 
-  private XRayListener xRayListener;
-  private Logs logs;
+  @Getter private XRayListener xRayListener;
+  @Getter private Logs logs;
 
   private boolean sendAlertEachVein;
   private boolean sendAlertToOPs;
 
   private String alertConfig;
   private String logsMessageFormatConfig;
+
+  @Getter private List<XRayOre> ores;
 
   @Override
   public void onEnable() {
@@ -60,7 +63,7 @@ public class XRayShield extends JavaPlugin {
     }
     if (getConfig().getBoolean("logs.enabled", false)) logs = new Logs(new File(getDataFolder(), "logs"),
             getConfig().getString("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'"));
-    XRayOre.ORES = new ArrayList<>();
+    ores = new ArrayList<>();
     ConfigurationSection oreSection = getConfig().getConfigurationSection("ores");
     oreSection.getKeys(false).forEach(oreName -> {
       Material blockType = Material.getMaterial(oreName.toUpperCase().replace(' ', '_'));
@@ -70,17 +73,16 @@ public class XRayShield extends JavaPlugin {
       }
       String timeString = oreSection.getString(oreName + ".time", "5m");
       XRayOre xRayOre = new XRayOre(blockType, oreSection.getInt(oreName + ".amount", 10), timeString, parseTime(timeString));
-      XRayOre.ORES.add(xRayOre);
+      ores.add(xRayOre);
     });
-    getLogger().info("X-Ray Shield loaded " + XRayOre.ORES.size() + " ores:");
-    XRayOre.ORES.forEach(ore -> getLogger().info(" - " + ore.getBlockType().name() + " - " + ore.getAmount() + "x - " + ore.getTimeString()));
+    getLogger().info("X-Ray Shield loaded " + ores.size() + " ores:");
+    ores.forEach(ore -> getLogger().info(" - " + ore.getBlockType().name() + " - " + ore.getAmount() + "x - " + ore.getTimeString()));
   }
 
   @Override
   public void onDisable() {
     HandlerList.unregisterAll(this);
-    xRayListener.blockPlacements.clear();
-    xRayListener.blockPlacements = null;
+    xRayListener.getBlockPlacements().clear();
     xRayListener = null;
     logs.save();
     logs = null;
@@ -88,8 +90,8 @@ public class XRayShield extends JavaPlugin {
     breakEvents = null;
     playerLastAlerts.clear();
     playerLastAlerts = null;
-    XRayOre.ORES.clear();
-    XRayOre.ORES = null;
+    ores.clear();
+    ores = null;
   }
 
   @Override
@@ -103,7 +105,7 @@ public class XRayShield extends JavaPlugin {
 
   public void oreBreak(OreBreakEvent event) {
     breakEvents.add(event);
-    XRayOre xRayOre = XRayOre.ORES.stream().filter(ore -> ore.getBlockType() == event.getBlockType()).findFirst().orElse(null);
+    XRayOre xRayOre = ores.stream().filter(ore -> ore.getBlockType() == event.getBlockType()).findFirst().orElse(null);
     if (xRayOre == null) return;
     Bukkit.getScheduler().runTaskLater(this, () -> breakEvents.remove(event), xRayOre.getTime() * 20);
     List<OreBreakEvent> events = breakEvents.stream()
