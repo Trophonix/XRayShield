@@ -39,7 +39,7 @@ public class XRayShield extends JavaPlugin {
             getConfig().getString("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'"));
     breakEvents = new ArrayList<>();
     playerLastAlerts = new HashMap<>();
-    if (!getDataFolder().exists()) {
+    if (!new File(getDataFolder(), "config.yml").exists()) {
       getDataFolder().mkdirs();
       saveDefaultConfig();
     }
