@@ -38,7 +38,7 @@ public class Logs {
           file.getParentFile().mkdirs();
           file.createNewFile();
         }
-        for (String message : messages) fileWriter.write(message);
+        for (String message : messages) fileWriter.write(message + "\n");
         fileWriter.close();
       } catch (IOException e) {
         e.printStackTrace();
