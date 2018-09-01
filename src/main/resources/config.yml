@@ -29,22 +29,23 @@
 ores:
   iron_ore:
     amount: 48
-    time: '10m'
+    time: "10m"
   gold_ore:
     amount: 30
-    time: '10m'
+    time: "10m"
   diamond_ore:
     amount: 15
-    time: '10m'
+    time: "10m"
   emerald_ore:
     amount: 5
-    time: '5m'
+    time: "5m"
 
 sendAlertEachVein: true
 sendAlertToOPs: false
 
 logs:
   enabled: false
+  saveDelay: "5m"
   fileNameFormat: "dd'-'MM'-'yyyy'.log'"
   messageFormat: "'['kk:ss'] %player% mined %amount% %ore% in %time% at %location%'"
 

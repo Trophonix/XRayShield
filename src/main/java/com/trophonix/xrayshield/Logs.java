@@ -20,13 +20,8 @@ public class Logs {
   }
 
   public void push(String message) {
-    String fileName = fileNameFormat.format(new Date());
-    if (currentFileName == null || !currentFileName.equals(fileName)) {
-      currentFileName = fileName;
-      save();
-      messages.clear();
-      messages.add(new SimpleDateFormat(message).format(new Date()));
-    }
+    checkDate();
+    messages.add(message);
   }
 
   public void save() {
@@ -40,9 +35,18 @@ public class Logs {
         }
         for (String message : messages) fileWriter.write(message + "\n");
         fileWriter.close();
+        messages.clear();
       } catch (IOException e) {
         e.printStackTrace();
       }
+    }
+  }
+
+  public void checkDate() {
+    String fileName = fileNameFormat.format(new Date());
+    if (currentFileName == null || !currentFileName.equals(fileName)) {
+      save();
+      currentFileName = fileName;
     }
   }
 

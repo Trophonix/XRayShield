@@ -31,6 +31,7 @@ public class XRayShield extends JavaPlugin {
   private boolean sendAlertToOPs;
 
   private String alertConfig;
+
   private String logsMessageFormatConfig;
 
   @Getter private List<XRayOre> ores;
@@ -61,8 +62,12 @@ public class XRayShield extends JavaPlugin {
 
       saveConfig();
     }
-    if (getConfig().getBoolean("logs.enabled", false)) logs = new Logs(new File(getDataFolder(), "logs"),
-            getConfig().getString("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'"));
+    if (getConfig().getBoolean("logs.enabled", false)) {
+      logs = new Logs(new File(getDataFolder(), "logs"),
+              getConfig().getString("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'"));
+      long saveDelay = parseTime(getConfig().getString("logs.saveDelay", "5m"));
+      if (saveDelay > 0) Bukkit.getScheduler().runTaskTimer(this, logs::save, saveDelay, saveDelay);
+    }
     ores = new ArrayList<>();
     ConfigurationSection oreSection = getConfig().getConfigurationSection("ores");
     oreSection.getKeys(false).forEach(oreName -> {
