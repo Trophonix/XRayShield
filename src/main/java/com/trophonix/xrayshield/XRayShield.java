@@ -56,6 +56,10 @@ public class XRayShield extends JavaPlugin {
         getConfig().set("logs.messageFormat", "'['kk:ss'] %player% mined %amount% %ore% in %time% at %location%'");
       }
 
+      if (version < 1.04) {
+        getConfig().set("logs.saveDelay", "5m");
+      }
+
       if (version == 0) {
         getConfig().set("configVersion", Double.parseDouble(getDescription().getVersion()));
       }
@@ -66,7 +70,7 @@ public class XRayShield extends JavaPlugin {
       logs = new Logs(new File(getDataFolder(), "logs"),
               getConfig().getString("logs.fileNameFormat", "dd'-'MM'-'yyyy'.log'"));
       long saveDelay = parseTime(getConfig().getString("logs.saveDelay", "5m"));
-      if (saveDelay > 0) Bukkit.getScheduler().runTaskTimer(this, logs::save, saveDelay, saveDelay);
+      if (saveDelay > 0) Bukkit.getScheduler().runTaskTimer(this, logs::save, saveDelay * 20L, saveDelay * 20L);
     }
     ores = new ArrayList<>();
     ConfigurationSection oreSection = getConfig().getConfigurationSection("ores");
