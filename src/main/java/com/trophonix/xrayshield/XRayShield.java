@@ -127,8 +127,8 @@ public class XRayShield extends JavaPlugin {
       if (last != null && event.getPlayer().getLocation().distance(last) < 5) {
         return;
       }
-      String alert = new SimpleDateFormat(replacePlaceholders(alertConfig, event.getPlayer(), event.getBlockType(), events.size(), xRayOre.getTimeString(), event.getLocation())).format(new Date());
-      if (logs != null) logs.push(replacePlaceholders(logsMessageFormatConfig, event.getPlayer(), event.getBlockType(), events.size(), xRayOre.getTimeString(), event.getLocation()));
+      String alert = replacePlaceholders(alertConfig, event.getPlayer(), event.getBlockType(), events.size(), xRayOre.getTimeString(), event.getLocation());
+      if (logs != null) logs.push(new SimpleDateFormat(replacePlaceholders(logsMessageFormatConfig, event.getPlayer(), event.getBlockType(), events.size(), xRayOre.getTimeString(), event.getLocation())).format(new Date()));
       Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("xrayshield.alert") || (sendAlertToOPs && player.isOp()))
               .forEach(player -> player.sendMessage(alert.split("%n")));
       playerLastAlerts.put(event.getPlayer().getUniqueId(), event.getLocation());
