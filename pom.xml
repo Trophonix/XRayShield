@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.trophonix.xrayshield</groupId>
-    <artifactId>xrayshield</artifactId>
+    <artifactId>XRayShield</artifactId>
     <version>1.05</version>
 
     <repositories>
